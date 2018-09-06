@@ -3,12 +3,15 @@ package com.example.kinga.trasapolublinie;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -37,6 +47,8 @@ import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class Navigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,
@@ -48,6 +60,7 @@ public class Navigation extends AppCompatActivity
     private GoogleApiClient gApi;
     private GoogleMap mMap;
     private MapsActivity maa;
+    private String TAG = Navigation.class.getSimpleName();;
 
 
     @Override
@@ -73,7 +86,7 @@ public class Navigation extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         //final TextView Name_nav = (TextView) headerView.findViewById(R.id.Name_nav);
 
-       // image = (ImageView) headerView.findViewById(R.id.imageView);
+        image = (ImageView) headerView.findViewById(R.id.imageView);
         email =(TextView) headerView.findViewById(R.id.email);
         name =(TextView) headerView.findViewById(R.id.name);
 
@@ -112,8 +125,25 @@ public class Navigation extends AppCompatActivity
     private void handleSingnInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
+
+            String personPhotoUrl = account.getPhotoUrl().toString();
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
+            Glide.with(getApplicationContext()).load(personPhotoUrl)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .transition(withCrossFade())
+                    .apply(new RequestOptions().transform(new RoundedCorners(100))
+                            .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
+                    .into(image);
 
             //Glide.with(this).load(account.getPhotoUrl().toString()).into(image);
             //Log.d("MIAPP",account.getPhotoUrl().toString());
@@ -121,6 +151,7 @@ public class Navigation extends AppCompatActivity
             goLogInScreen();
         }
     }
+
 
     private void goLogInScreen() {
         Intent intent = new Intent(this,LoginActivity.class);
@@ -204,7 +235,7 @@ public class Navigation extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+       // Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
     public void onMapReady(GoogleMap googleMap) {

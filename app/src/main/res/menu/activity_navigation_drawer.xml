@@ -2,37 +2,37 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
-
-    <item android:title="Communicate">
+    <item android:title="Kategorie">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Bezpłatne" />
             <item
-                android:id="@+id/log_out"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Wyloguj" />
+                android:id="@+id/nav_camera"
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Import" />
+            <item
+                android:id="@+id/nav_gallery"
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Gallery" />
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Slideshow" />
+            <item
+                android:id="@+id/nav_manage"
+                android:icon="@android:drawable/ic_menu_compass"
+                android:title="Tools" />
         </menu>
     </item>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/log_out"
+            android:icon="@android:drawable/ic_lock_lock"
+            android:title="Wyloguj" />
+    </group>
+
+
 
 </menu>
