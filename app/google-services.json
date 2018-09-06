@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1032995931287",
+    "firebase_url": "https://lublin-12da5.firebaseio.com",
+    "project_id": "lublin-12da5",
+    "storage_bucket": "lublin-12da5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032995931287:android:801e52753fdc21ea",
+        "android_client_info": {
+          "package_name": "com.example.kinga.trasapolublinie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032995931287-nirk4jls7flv4hg0rmpk3ce525ro9cv7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kinga.trasapolublinie",
+            "certificate_hash": "6c364ac1ab5fda4d84682860810487995666aaee"
+          }
+        },
+        {
+          "client_id": "1032995931287-buhinqpuuhai5r6cki5ijul12uem3k27.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqGSBHxRbloBrS7qZs1QBAQhvMafBoMlY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032995931287-buhinqpuuhai5r6cki5ijul12uem3k27.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/domyslny"
+        android:orderInCategory="100"
+        android:title="Domyślny"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/satelita"
+        android:orderInCategory="100"
+        android:title="Satelita"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/teren"
+        android:orderInCategory="100"
+        android:title="Teren"
+        app:showAsAction="never" />
+</menu>
