@@ -8,4 +8,12 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
+
+    <array name="Kategorie">
+        <item>Bezpłatne</item>
+        <item>Zabytki</item>
+        <item>Dla dzieci</item>
+        <item>cos</item>
+        <item>ble</item>
+    </array>
 </resources>

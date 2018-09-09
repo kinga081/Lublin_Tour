@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,8 +59,7 @@ public class Navigation extends AppCompatActivity
     private TextView name;
     private GoogleApiClient gApi;
     private GoogleMap mMap;
-    private MapsActivity maa;
-    private String TAG = Navigation.class.getSimpleName();;
+    private Button button;
 
 
     @Override
@@ -69,6 +68,21 @@ public class Navigation extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        if(true) {//warrunek dla admina
+            fab.setVisibility(View.VISIBLE);
+        }
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Navigation.this, Dodawanie.class);
+                startActivity(intent);
+            }
+        });
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
@@ -101,8 +115,6 @@ public class Navigation extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso )
                 .build();
 
-        maa= new MapsActivity();
-       // maa.onCreate(savedInstanceState);
     }
     @Override
     protected void onStart() {
@@ -126,24 +138,28 @@ public class Navigation extends AppCompatActivity
         if(result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
 
+            //if(account.getPhotoUrl().isAbsolute()){
             String personPhotoUrl = account.getPhotoUrl().toString();
+            //Toast.makeText(getApplicationContext(),personPhotoUrl,Toast.LENGTH_LONG).show();
+                Glide.with(getApplicationContext()).load(personPhotoUrl)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
+                        .transition(withCrossFade())
+                        .apply(new RequestOptions().transform(new RoundedCorners(100))
+                                .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
+                        .into(image);
+            //}
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
-            Glide.with(getApplicationContext()).load(personPhotoUrl)
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            return false;
-                        }
-                    })
-                    .transition(withCrossFade())
-                    .apply(new RequestOptions().transform(new RoundedCorners(100))
-                            .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
-                    .into(image);
+
 
             //Glide.with(this).load(account.getPhotoUrl().toString()).into(image);
             //Log.d("MIAPP",account.getPhotoUrl().toString());
@@ -173,6 +189,7 @@ public class Navigation extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
+
         return true;
     }
 
@@ -205,6 +222,7 @@ public class Navigation extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
@@ -226,6 +244,9 @@ public class Navigation extends AppCompatActivity
                     }
                 }
             });
+        } else if (id == R.id.add) {
+
+            item.setVisible(false);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

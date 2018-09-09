@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.example.kinga.trasapolublinie.Dodawanie">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="28dp"
+            android:entries="@array/Kategorie" />
+
+        <EditText
+            android:id="@+id/nazwa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="35dp"
+            android:ems="10"
+            android:hint="Nazwa"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/opis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/nazwa"
+            android:layout_below="@+id/nazwa"
+            android:layout_marginTop="48dp"
+            android:ems="10"
+            android:hint="Opis"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/localization"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/opis"
+            android:layout_below="@+id/opis"
+            android:layout_marginTop="42dp"
+            android:ems="10"
+            android:hint="Współrzędne"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/dodaj"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/localization"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="64dp"
+            android:onClick="Dodaj"
+            android:text="Dodaj"
+            tools:ignore="OnClick" />
+
+    </LinearLayout>
+</ScrollView>
