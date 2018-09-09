@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Dodawanie extends AppCompatActivity {
+public class DodawanieActivity extends AppCompatActivity {
 
 
     private EditText nazwa;
@@ -49,13 +49,15 @@ public class Dodawanie extends AppCompatActivity {
 
         String genere = spiner.getSelectedItem().toString();
 
-        if(!TextUtils.isEmpty(name)){
+        if(!TextUtils.isEmpty(name)
+                &&!TextUtils.isEmpty(opi)
+                &&!TextUtils.isEmpty(loc))
+        {
             String id = bazaDanych.push().getKey();
             Lokalizacje lokalizacje = new Lokalizacje(id,name,opi,loc,genere);
             bazaDanych.child(id).setValue(lokalizacje);
 
             Toast.makeText(this,"Dodano",Toast.LENGTH_SHORT).show();
-
 
         }else{
             Toast.makeText(this,"Wypełnij wszystkie pola",Toast.LENGTH_LONG).show();

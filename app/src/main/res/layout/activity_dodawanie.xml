@@ -7,7 +7,7 @@
     android:layout_margin="5dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.kinga.trasapolublinie.Dodawanie">
+    tools:context="com.example.kinga.trasapolublinie.DodawanieActivity">
 
 
     <LinearLayout

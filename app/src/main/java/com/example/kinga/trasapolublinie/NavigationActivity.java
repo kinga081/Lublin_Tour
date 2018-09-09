@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -49,7 +48,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-public class Navigation extends AppCompatActivity
+public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener{
@@ -59,7 +58,7 @@ public class Navigation extends AppCompatActivity
     private TextView name;
     private GoogleApiClient gApi;
     private GoogleMap mMap;
-    private Button button;
+    private FloatingActionButton fab;
 
 
     @Override
@@ -69,16 +68,12 @@ public class Navigation extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-        if(true) {//warrunek dla admina
-            fab.setVisibility(View.VISIBLE);
-        }
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Navigation.this, Dodawanie.class);
+                Intent intent = new Intent(NavigationActivity.this, DodawanieActivity.class);
                 startActivity(intent);
             }
         });
@@ -159,6 +154,10 @@ public class Navigation extends AppCompatActivity
             //}
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
+
+            if(account.getEmail().equals("para.dzwig@gmail.com")){//konto admina
+                fab.setVisibility(View.VISIBLE);
+            }
 
 
             //Glide.with(this).load(account.getPhotoUrl().toString()).into(image);
