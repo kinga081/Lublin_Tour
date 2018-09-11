@@ -19,7 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,20 +44,41 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.concurrent.LinkedBlockingDeque;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,
-        GoogleMap.OnMyLocationClickListener{
+        GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerClickListener {
 
     private ImageView image;
     private TextView email;
     private TextView name;
     private GoogleApiClient gApi;
     private GoogleMap mMap;
-    private FloatingActionButton fab;
+    private FloatingActionButton add;
+    private FloatingActionButton delete;
+    private LinkedBlockingDeque markerPoints;
+    private DatabaseReference mDatabaseReference;
+    private Query ref;
+    private DatabaseReference mUsers;
+    private Marker marker;
+
+    private ChildEventListener mChildEventListener;
 
 
     @Override
@@ -68,12 +88,20 @@ public class NavigationActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        add = (FloatingActionButton) findViewById(R.id.add);
+        delete = (FloatingActionButton) findViewById(R.id.delete);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(NavigationActivity.this, DodawanieActivity.class);
+                startActivity(intent);
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NavigationActivity.this, UsunActivity.class);
                 startActivity(intent);
             }
         });
@@ -110,7 +138,11 @@ public class NavigationActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso )
                 .build();
 
+
+        ChildEventListener mChildEventListener;
     }
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -155,8 +187,10 @@ public class NavigationActivity extends AppCompatActivity
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
 
-            if(account.getEmail().equals("para.dzwig@gmail.com")){//konto admina
-                fab.setVisibility(View.VISIBLE);
+            if(account.getEmail().equals("para.dzwig@gmail.com")
+                    || account.getEmail().equals("kinga081@gmail.com")){//konto admina
+                add.setVisibility(View.VISIBLE);
+                delete.setVisibility(View.VISIBLE);
             }
 
 
@@ -222,17 +256,19 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.category_one) {
+            dodajMarker("Bezpłatne");
+        }else if (id == R.id.category_two) {
+            dodajMarker("Zabytki");
+        } else if (id == R.id.category_three) {
+            dodajMarker("Dla dzieci");
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.category_four) {
+            ddd();
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.category_five) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.log_out) {
+        }  else if (id == R.id.log_out) {
             Auth.GoogleSignInApi.signOut(gApi).setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(@NonNull Status status) {
@@ -270,8 +306,97 @@ public class NavigationActivity extends AppCompatActivity
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
 
-        // mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        //options.mapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setOnMarkerClickListener(this);
+
+
+
+    }
+    public void dodajMarker(String kategoria){
+
+        mUsers= FirebaseDatabase.getInstance().getReference("lokalizacje").child(kategoria);
+        mUsers.push().setValue(marker);
+        mMap.clear();
+        mUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Lokalizacje user = s.getValue(Lokalizacje.class);
+                    LatLng location=new LatLng(Double.parseDouble(user.getDlugosc()),Double.parseDouble(user.getSzerokosc()));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(location)
+                            .title(user.getNazwa())
+                            .snippet(user.getOpis())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
+                    );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+/*        query.addChildEventListener(new ChildEventListener() {
+            // Retrieve new posts as they are added to Firebase
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
+
+                //Map<String, Object> newPost = (Map<String, Object>) snapshot.getValue();
+                for(DataSnapshot data : snapshot.getChildren()){
+                    Lokalizacje lokalizacje = data.getValue(Lokalizacje.class);
+
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(lokalizacje.getDlugosc()), Double.parseDouble(lokalizacje.getSzerokosc())))
+                            .title(lokalizacje.getNazwa())
+                            .snippet(lokalizacje.getOpis())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                    );
+                }
+
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+            //... ChildEventListener also defines onChildChanged, onChildRemoved,
+            //    onChildMoved and onCanceled, covered in later sections.
+        });
+*/
+}
+public void ddd(){
+    mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(51.248812, 22.56914340000003))
+                .title("Plac Po Farze")
+                .snippet("Grodzka 18, 20-400")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+        );
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(51.225193, 22.61422189999996))
+                .title("Majdanek")
+                .snippet("Majdanek, 20-001")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+        );
+
     }
 
     public void onMyLocationClick(@NonNull Location location) {
@@ -287,4 +412,8 @@ public class NavigationActivity extends AppCompatActivity
         return false;
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
 }

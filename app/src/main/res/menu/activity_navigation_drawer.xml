@@ -6,23 +6,23 @@
     <item android:title="Kategorie">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/category_one"
                 android:icon="@android:drawable/ic_menu_compass"
                 android:title="Bezpłatne" />
             <item
-                android:id="@+id/nav_camera"
+                android:id="@+id/category_two"
                 android:icon="@android:drawable/ic_menu_compass"
                 android:title="Import" />
             <item
-                android:id="@+id/nav_gallery"
+                android:id="@+id/category_three"
                 android:icon="@android:drawable/ic_menu_compass"
                 android:title="Gallery" />
             <item
-                android:id="@+id/nav_slideshow"
+                android:id="@+id/category_four"
                 android:icon="@android:drawable/ic_menu_compass"
                 android:title="Slideshow" />
             <item
-                android:id="@+id/nav_manage"
+                android:id="@+id/category_five"
                 android:icon="@android:drawable/ic_menu_compass"
                 android:title="Tools" />
         </menu>

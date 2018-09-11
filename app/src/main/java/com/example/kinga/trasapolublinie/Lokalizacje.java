@@ -1,8 +1,6 @@
 package com.example.kinga.trasapolublinie;
 
-/**
- * Created by kinga on 09.09.2018.
- */
+
 
 public class Lokalizacje {
 
@@ -11,17 +9,27 @@ public class Lokalizacje {
     String opis;
     String wspolrzedne;
     String kategoria;
+    String dlugosc;
+    String szerokosc;
 
-    public Lokalizacje(){
 
+    public Lokalizacje() {
     }
 
-    public Lokalizacje(String localId, String nazwa, String opis, String wspolrzedne, String kategoria) {
+    public Lokalizacje(String localId, String nazwa, String opis,String dlugosc, String szerokosc) {
         LocalId = localId;
         this.nazwa = nazwa;
         this.opis = opis;
-        this.wspolrzedne = wspolrzedne;
-        this.kategoria = kategoria;
+        this.dlugosc = dlugosc;
+        this.szerokosc = szerokosc;
+    }
+
+    public String getDlugosc() {
+        return dlugosc;
+    }
+
+    public String getSzerokosc() {
+        return szerokosc;
     }
 
     public String getLocalId() {
@@ -36,9 +44,6 @@ public class Lokalizacje {
         return opis;
     }
 
-    public String getWspolrzedne() {
-        return wspolrzedne;
-    }
 
     public String getKategoria() {
         return kategoria;

@@ -7,7 +7,7 @@
     android:layout_margin="5dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.kinga.trasapolublinie.DodawanieActivity">
+    tools:context="com.example.kinga.trasapolublinie.UsunActivity">
 
 
     <LinearLayout
@@ -35,46 +35,8 @@
             android:hint="Nazwa"
             android:inputType="textPersonName" />
 
-        <EditText
-            android:id="@+id/opis"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/nazwa"
-            android:layout_below="@+id/nazwa"
-            android:layout_marginTop="48dp"
-            android:ems="10"
-            android:hint="Opis"
-            android:inputType="textPersonName" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/dlugosc"
-                android:layout_width="180dp"
-                android:layout_height="match_parent"
-                android:layout_alignStart="@+id/opis"
-                android:layout_below="@+id/opis"
-                android:layout_marginTop="42dp"
-                android:ems="10"
-                android:hint="Długość"
-                android:inputType="textPersonName" />
-            <EditText
-                android:id="@+id/szerokosc"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignStart="@+id/opis"
-                android:layout_below="@+id/opis"
-                android:layout_marginTop="42dp"
-                android:ems="10"
-                android:hint="Szerokość"
-                android:inputType="textPersonName" />
-        </LinearLayout>
-
         <Button
-            android:id="@+id/dodaj"
+            android:id="@+id/delete"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,9 +44,17 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="64dp"
-            android:onClick="Dodaj"
-            android:text="Dodaj"
+            android:onClick="Usun"
+            android:text="Usuń"
             tools:ignore="OnClick" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/delete"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="360dp"/>
 
     </LinearLayout>
 </ScrollView>
