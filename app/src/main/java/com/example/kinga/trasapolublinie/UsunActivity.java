@@ -50,34 +50,16 @@ public class UsunActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                lokalizacjeList.clear();
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    Lokalizacje lokalizacje = data.getValue(Lokalizacje.class);
-                    lokalizacjeList.add(lokalizacje);
-                }
-                Lista adapter = new Lista(UsunActivity.this,lokalizacjeList);
-                list.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     public void Usun(View view){
         usunPunkt(pktId);
     }
 
     public void usunPunkt(String pktId){
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("lokalizacje").child(pktId);
+        String name = nazwa.getText().toString().trim();
+        String genere = spiner.getSelectedItem().toString();
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("lokalizacje").child(genere).child(name);
         mDatabaseReference.removeValue();
         Toast.makeText(this,"Usunięto",Toast.LENGTH_SHORT).show();
     }

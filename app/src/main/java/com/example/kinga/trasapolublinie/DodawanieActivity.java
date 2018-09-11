@@ -61,7 +61,7 @@ public class DodawanieActivity extends AppCompatActivity {
         {
             String id = bazaDanych.push().getKey();
             Lokalizacje lokalizacje = new Lokalizacje(id,name,opi,dlu,szer);
-            bazaDanych.child(genere).child(id).setValue(lokalizacje);
+            bazaDanych.child(genere).child(name).setValue(lokalizacje);
 
             Toast.makeText(this,"Dodano",Toast.LENGTH_SHORT).show();
 
