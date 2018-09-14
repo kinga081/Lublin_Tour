@@ -1,15 +1,20 @@
 package com.example.kinga.trasapolublinie;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +45,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,6 +54,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,6 +63,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
@@ -74,11 +92,19 @@ public class NavigationActivity extends AppCompatActivity
     private FloatingActionButton delete;
     private LinkedBlockingDeque markerPoints;
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference bazaDanych;
     private Query ref;
     private DatabaseReference mUsers;
+    private DatabaseReference mAdmin;
     private Marker marker;
 
     private ChildEventListener mChildEventListener;
+    private double longitude;
+    private double latitude;
+    private FloatingActionButton start;
+    ArrayList MrkerPoints = new ArrayList();
+    private LatLng origin;
+    private LatLng dest;
 
 
     @Override
@@ -87,9 +113,13 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         add = (FloatingActionButton) findViewById(R.id.add);
         delete = (FloatingActionButton) findViewById(R.id.delete);
+        start = (FloatingActionButton) findViewById(R.id.start);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +133,15 @@ public class NavigationActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent = new Intent(NavigationActivity.this, UsunActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = getDirectionsUrl(origin, dest);
+                DownloadTask downloadTask = new DownloadTask();
+                downloadTask.execute(url);
             }
         });
 
@@ -187,6 +226,9 @@ public class NavigationActivity extends AppCompatActivity
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
 
+
+            //konto_admina(account);
+
             if(account.getEmail().equals("para.dzwig@gmail.com")
                     || account.getEmail().equals("kinga081@gmail.com")){//konto admina
                 add.setVisibility(View.VISIBLE);
@@ -194,11 +236,38 @@ public class NavigationActivity extends AppCompatActivity
             }
 
 
+
             //Glide.with(this).load(account.getPhotoUrl().toString()).into(image);
             //Log.d("MIAPP",account.getPhotoUrl().toString());
         }else {
             goLogInScreen();
         }
+    }
+
+    public void konto_admina(final GoogleSignInAccount account) {
+        bazaDanych = FirebaseDatabase.getInstance().getReference("Admin");
+
+        mAdmin.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Admin user = s.getValue(Admin.class);
+
+                   if(account.getEmail().equals(user.getEmail())){//konto admina
+                      add.setVisibility(View.VISIBLE);
+                        delete.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
     }
 
 
@@ -309,8 +378,22 @@ public class NavigationActivity extends AppCompatActivity
         mMap.setOnMarkerClickListener(this);
 
 
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(51.238338, 22.5690933)));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+
+        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        origin =  new LatLng(latitude, longitude);
+        //dest =  new LatLng(51.238338, 22.5690933);//(LatLng) markerPoints.get(0);
 
     }
+
+
     public void dodajMarker(String kategoria){
 
         mUsers= FirebaseDatabase.getInstance().getReference("lokalizacje").child(kategoria);
@@ -414,6 +497,132 @@ public void ddd(){
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false;
+        dest = marker.getPosition();
+        start.setVisibility(View.VISIBLE);
+    return false;
+    }
+
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+
+            parserTask.execute(result);
+
+        }
+    }
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList();
+                lineOptions = new PolylineOptions();
+
+                List<HashMap<String, String>> path = result.get(i);
+
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                lineOptions.addAll(points);
+                lineOptions.width(10);
+                lineOptions.color(Color.MAGENTA);
+                lineOptions.geodesic(true);
+
+            }
+
+            mMap.addPolyline(lineOptions);
+        }
+    }
+
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
+        String output = "json";
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        return url;
+    }
+
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            urlConnection.connect();
+
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
     }
 }

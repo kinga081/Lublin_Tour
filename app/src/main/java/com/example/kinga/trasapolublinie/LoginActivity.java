@@ -44,6 +44,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //MapsActivity
     //MainActivity
     //activity_main
+    //lista
+    //activity_lisa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         manager = (SensorManager) getSystemService(SENSOR_SERVICE);
         int permissionCheck = ContextCompat.checkSelfPermission(this,//pozwolenie
-                android.Manifest.permission.ACCESS_FINE_LOCATION);;
+                android.Manifest.permission.ACCESS_FINE_LOCATION);
         int permissionCheck2 = ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION);
         int permissionCheck3 = ContextCompat.checkSelfPermission(this,

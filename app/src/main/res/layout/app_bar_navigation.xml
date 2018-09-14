@@ -20,7 +20,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_navigation" />
+    <include
+        android:id="@+id/include"
+        layout="@layout/content_navigation" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add"
@@ -41,6 +43,18 @@
         android:visibility="invisible"
         app:backgroundTint="#500808"
         app:srcCompat="@android:drawable/ic_delete"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|start"
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+        app:backgroundTint="#dc0498"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="left|bottom"
+        app:srcCompat="@android:drawable/ic_media_play" />
 
 
 

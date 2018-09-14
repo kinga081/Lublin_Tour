@@ -12,11 +12,11 @@
             <item
                 android:id="@+id/category_two"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Import" />
+                android:title="Zabytki" />
             <item
                 android:id="@+id/category_three"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Gallery" />
+                android:title="Dla dzieci" />
             <item
                 android:id="@+id/category_four"
                 android:icon="@android:drawable/ic_menu_compass"
