@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -105,6 +106,7 @@ public class NavigationActivity extends AppCompatActivity
     ArrayList MrkerPoints = new ArrayList();
     private LatLng origin;
     private LatLng dest;
+    private FloatingActionButton add_email;
 
 
     @Override
@@ -119,6 +121,7 @@ public class NavigationActivity extends AppCompatActivity
 
         add = (FloatingActionButton) findViewById(R.id.add);
         delete = (FloatingActionButton) findViewById(R.id.delete);
+        add_email = (FloatingActionButton) findViewById(R.id.add_email);
         start = (FloatingActionButton) findViewById(R.id.start);
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +138,14 @@ public class NavigationActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+        add_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NavigationActivity.this, DodajAdminActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,35 +218,27 @@ public class NavigationActivity extends AppCompatActivity
             //if(account.getPhotoUrl().isAbsolute()){
             String personPhotoUrl = account.getPhotoUrl().toString();
             //Toast.makeText(getApplicationContext(),personPhotoUrl,Toast.LENGTH_LONG).show();
-                Glide.with(getApplicationContext()).load(personPhotoUrl)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .transition(withCrossFade())
-                        .apply(new RequestOptions().transform(new RoundedCorners(100))
-                                .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
-                        .into(image);
+            Glide.with(getApplicationContext()).load(personPhotoUrl)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .transition(withCrossFade())
+                    .apply(new RequestOptions().transform(new RoundedCorners(100))
+                            .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
+                    .into(image);
             //}
             name.setText(account.getDisplayName());
             email.setText(account.getEmail());
 
 
-            //konto_admina(account);
-
-            if(account.getEmail().equals("para.dzwig@gmail.com")
-                    || account.getEmail().equals("kinga081@gmail.com")){//konto admina
-                add.setVisibility(View.VISIBLE);
-                delete.setVisibility(View.VISIBLE);
-            }
-
-
+            konto_admina(account);
 
             //Glide.with(this).load(account.getPhotoUrl().toString()).into(image);
             //Log.d("MIAPP",account.getPhotoUrl().toString());
@@ -245,7 +248,7 @@ public class NavigationActivity extends AppCompatActivity
     }
 
     public void konto_admina(final GoogleSignInAccount account) {
-        bazaDanych = FirebaseDatabase.getInstance().getReference("Admin");
+        mAdmin = FirebaseDatabase.getInstance().getReference("Admin");
 
         mAdmin.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -253,9 +256,10 @@ public class NavigationActivity extends AppCompatActivity
                 for (DataSnapshot s : dataSnapshot.getChildren()){
                     Admin user = s.getValue(Admin.class);
 
-                   if(account.getEmail().equals(user.getEmail())){//konto admina
-                      add.setVisibility(View.VISIBLE);
+                    if(account.getEmail().equals(user.getEmail())){//konto admina
+                        add.setVisibility(View.VISIBLE);
                         delete.setVisibility(View.VISIBLE);
+                        add_email.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -360,7 +364,7 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-       // Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        // Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
     public void onMapReady(GoogleMap googleMap) {
@@ -378,6 +382,7 @@ public class NavigationActivity extends AppCompatActivity
         mMap.setOnMarkerClickListener(this);
 
 
+
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         longitude = location.getLongitude();
@@ -390,6 +395,9 @@ public class NavigationActivity extends AppCompatActivity
         //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         origin =  new LatLng(latitude, longitude);
         //dest =  new LatLng(51.238338, 22.5690933);//(LatLng) markerPoints.get(0);
+
+
+
 
     }
 
@@ -423,11 +431,9 @@ public class NavigationActivity extends AppCompatActivity
             // Retrieve new posts as they are added to Firebase
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
-
                 //Map<String, Object> newPost = (Map<String, Object>) snapshot.getValue();
                 for(DataSnapshot data : snapshot.getChildren()){
                     Lokalizacje lokalizacje = data.getValue(Lokalizacje.class);
-
                     mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(lokalizacje.getDlugosc()), Double.parseDouble(lokalizacje.getSzerokosc())))
                             .title(lokalizacje.getNazwa())
@@ -435,37 +441,26 @@ public class NavigationActivity extends AppCompatActivity
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                     );
                 }
-
-
-
             }
-
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
-
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
             }
-
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
             //... ChildEventListener also defines onChildChanged, onChildRemoved,
             //    onChildMoved and onCanceled, covered in later sections.
         });
 */
-}
-public void ddd(){
-    mMap.clear();
+    }
+    public void ddd(){
+        mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(51.248812, 22.56914340000003))
                 .title("Plac Po Farze")
@@ -499,7 +494,7 @@ public void ddd(){
     public boolean onMarkerClick(Marker marker) {
         dest = marker.getPosition();
         start.setVisibility(View.VISIBLE);
-    return false;
+        return false;
     }
 
     private class DownloadTask extends AsyncTask<String, Void, String> {
