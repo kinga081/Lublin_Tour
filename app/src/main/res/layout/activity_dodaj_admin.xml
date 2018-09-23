@@ -14,6 +14,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
         <EditText
             android:id="@+id/add"
             android:layout_width="match_parent"
@@ -25,31 +30,31 @@
             android:hint="E-mail"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/Dodaj"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp"
-            android:layout_gravity="center"
-            android:onClick="Dodaj"
-            android:text="Dodaj"
-            tools:ignore="OnClick" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="126dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/Usun"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/Dodaj"
-            android:layout_below="@+id/Dodaj"
-            android:layout_marginTop="33dp"
-            android:layout_gravity="center"
-            android:onClick="Usun"
-            android:text="Usuń"
-            tools:ignore="OnClick" />
+            <Button
+                android:id="@+id/Usun"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="147dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:onClick="Usun"
+                android:text="Usuń"
+                tools:ignore="OnClick" />
+
+            <Button
+                android:id="@+id/Dodaj"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:onClick="Dodaj"
+                android:text="Dodaj"
+                tools:ignore="OnClick" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

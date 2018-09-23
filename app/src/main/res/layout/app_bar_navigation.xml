@@ -28,7 +28,7 @@
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|start"
         android:visibility="invisible"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="#115b17"

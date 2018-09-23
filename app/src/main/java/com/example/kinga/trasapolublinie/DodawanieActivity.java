@@ -29,6 +29,7 @@ public class DodawanieActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodawanie);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         nazwa = (EditText)findViewById(R.id.nazwa);
         opis = (EditText)findViewById(R.id.opis);
