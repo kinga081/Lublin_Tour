@@ -21,19 +21,14 @@
             android:layout_height="45dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="28dp"
             android:entries="@array/Kategorie" />
 
-        <EditText
-            android:id="@+id/nazwa"
+        <Spinner
+            android:id="@+id/spinner2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="35dp"
-            android:ems="10"
-            android:hint="Nazwa"
-            android:inputType="textPersonName" />
+            android:layout_height="45dp"
+            android:layout_marginTop="28dp"/>
+
 
         <Button
             android:id="@+id/delete"

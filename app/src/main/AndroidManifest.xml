@@ -54,12 +54,12 @@
         </activity>
         <activity
             android:name=".UsunActivity"
-            android:label="USUŃ lOKALIZACJĘ"
+            android:label="USUŃ LOKALIZACJĘ"
             android:parentActivityName=".NavigationActivity"
             />
         <activity
             android:name=".DodajAdminActivity"
-            android:label="ADMINISTRZTORZY"
+            android:label="ADMINISTRATORZY"
             android:parentActivityName=".NavigationActivity"
             />
     </application>

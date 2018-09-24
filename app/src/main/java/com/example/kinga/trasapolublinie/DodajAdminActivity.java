@@ -30,9 +30,8 @@ public class DodajAdminActivity extends AppCompatActivity {
     private Spinner spinner;
     private FirebaseHelper helper;
     private DatabaseReference bd;
-    ArrayAdapter<String> dupa;
-    String names[];//={"dupa1","dupa2","dupa3"};
     private ArrayList<String> name;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +42,7 @@ public class DodajAdminActivity extends AppCompatActivity {
         add = (EditText) findViewById(R.id.add);
         spinner = (Spinner) findViewById(R.id.spinner);
 
-        bazaDanych = FirebaseDatabase.getInstance().getReference("Admin");
-
-        bd = FirebaseDatabase.getInstance().getReference();
-        //tab = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,helper.retrieve(,)
-        helper=new FirebaseHelper(bd);
-
         konto_admina();
-
 
         //if(spinner.equals(zspinner.getSelectedItem().toString())) {
         //  Toast.makeText(this, "dupa" + spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
@@ -59,21 +51,12 @@ public class DodajAdminActivity extends AppCompatActivity {
 
 
     }
-    @Override
-    protected void onStart() {
-        super.onStart();
-       //konto_admina();
-
-       //usunPunkt();
-    }
-
 
     public void konto_admina() {
        name=new ArrayList<>();
-       name.add("Wybierz co usunac");
-        //bd = FirebaseDatabase.getInstance().getReference("lokalizacje").child("Bezpłatne");
-
-        bazaDanych.addListenerForSingleValueEvent(new ValueEventListener() {
+       name.add("Wybierz co usunąć");
+       bazaDanych = FirebaseDatabase.getInstance().getReference("Admin");
+       bazaDanych.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -90,10 +73,8 @@ public class DodajAdminActivity extends AppCompatActivity {
             }
         });
 
-        dupa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
-        spinner.setAdapter(dupa);
-        //name.remove(0);
-
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
+        spinner.setAdapter(adapter);
 
     }
 

@@ -21,8 +21,29 @@
             android:layout_height="45dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="28dp"
             android:entries="@array/Kategorie" />
+
+        <RadioGroup
+            android:id="@+id/r1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/platny"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Płatny"
+                android:textColor="#930943" />
+             <RadioButton
+                android:id="@+id/darmowy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bezpłatny"
+                android:textColor="#299e1f"/>
+        </RadioGroup>
+
 
         <EditText
             android:id="@+id/nazwa"
@@ -47,9 +68,10 @@
             android:inputType="textPersonName" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
             <EditText
                 android:id="@+id/dlugosc"
@@ -61,9 +83,10 @@
                 android:ems="10"
                 android:hint="Długość"
                 android:inputType="textPersonName" />
+
             <EditText
                 android:id="@+id/szerokosc"
-                android:layout_width="match_parent"
+                android:layout_width="180dp"
                 android:layout_height="match_parent"
                 android:layout_alignStart="@+id/opis"
                 android:layout_below="@+id/opis"
@@ -85,6 +108,7 @@
             android:onClick="Dodaj"
             android:text="Dodaj"
             tools:ignore="OnClick" />
+
 
     </LinearLayout>
 </ScrollView>

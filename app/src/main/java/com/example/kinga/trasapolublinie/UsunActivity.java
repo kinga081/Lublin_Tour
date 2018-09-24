@@ -1,21 +1,15 @@
 package com.example.kinga.trasapolublinie;
 
-import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -27,25 +21,44 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class UsunActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReference;
-    private String pktId;
     private Spinner spiner;
-    private EditText nazwa;
-    private ListView list;
-    private List<Lokalizacje> lokalizacjeList;
+    private Spinner spiner2;
+    private ArrayList<String> name;
+    private ArrayAdapter<String> adapter;
+    private String genere;
+    private DatabaseReference baza;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usun);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nazwa = (EditText)findViewById(R.id.nazwa);
         spiner = (Spinner)findViewById(R.id.spinner);
+        spiner2 = (Spinner)findViewById(R.id.spinner2);
+
+
+        spiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0){
+                    Wybierz();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
+
+
     }
 
 
@@ -54,14 +67,42 @@ public class UsunActivity extends AppCompatActivity {
     }
 
     public void usunPunkt(){
-        String name = nazwa.getText().toString().trim();
-        String genere = spiner.getSelectedItem().toString();
+        String generuj = spiner2.getSelectedItem().toString();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("lokalizacje").child(genere).child(name);
-        mDatabaseReference.removeValue();
-
+        baza = FirebaseDatabase.getInstance().getReference("lokalizacje").child(genere).child(generuj);
+        baza.removeValue();
         Toast.makeText(this,"Usunięto",Toast.LENGTH_SHORT).show();
 
-        nazwa.getText().clear();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
+
+    public void Wybierz() {
+        name=new ArrayList<>();
+        name.add("Wybierz co usunąć");
+        genere = spiner.getSelectedItem().toString();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference("lokalizacje").child(genere);
+        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                    Lokalizacje user = s.getValue(Lokalizacje.class);
+                    name.add(user.getNazwa());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,name);
+        spiner2.setAdapter(adapter);
+
+    }
+
 }

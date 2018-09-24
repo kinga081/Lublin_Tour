@@ -10,10 +10,11 @@
     <string name="title_activity_maps">Map</string>
 
     <array name="Kategorie">
-        <item>Bezpłatne</item>
-        <item>Zabytki</item>
+        <item>Wybierz kategorię</item>
+        <item>Historia Lublina</item>
+        <item>Natura</item>
         <item>Dla dzieci</item>
-        <item>cos</item>
-        <item>ble</item>
+        <item>Wydarzenia Kulturalne</item>
+        <item>Inne</item>
     </array>
 </resources>

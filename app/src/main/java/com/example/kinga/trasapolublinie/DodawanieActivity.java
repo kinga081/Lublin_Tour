@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,12 +26,21 @@ public class DodawanieActivity extends AppCompatActivity {
 
     DatabaseReference bazaDanych;
     private EditText sz;
+    private RadioGroup r1;
+    private RadioButton radioLas1;
+    private RadioButton darmowy;
+    private RadioGroup grupa;
+    private RadioButton platny;
+    private boolean cena;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodawanie);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
 
         nazwa = (EditText)findViewById(R.id.nazwa);
         opis = (EditText)findViewById(R.id.opis);
@@ -47,6 +58,20 @@ public class DodawanieActivity extends AppCompatActivity {
     }
 
     private void dodajLokalizacje(){
+
+        grupa = (RadioGroup)findViewById(R.id.r1);
+        int zaz1 = grupa.getCheckedRadioButtonId();
+
+        platny = (RadioButton)findViewById(R.id.platny);//platny == true
+        darmowy = (RadioButton)findViewById(zaz1);
+
+        platny.toggle();
+
+        if((platny.equals(darmowy))){
+            cena = true;
+        }else cena = false;
+
+
         String name = nazwa.getText().toString().trim();
         String opi = opis.getText().toString().trim();
         String dlu = dl.getText().toString().trim();
@@ -54,14 +79,16 @@ public class DodawanieActivity extends AppCompatActivity {
 
         String genere = spiner.getSelectedItem().toString();
 
+
         if(!TextUtils.isEmpty(name)
                 &&!TextUtils.isEmpty(opi)
                 &&!TextUtils.isEmpty(dlu)
-                &&!TextUtils.isEmpty(szer))
+                &&!TextUtils.isEmpty(szer)
+                &&!genere.equals("Wybierz kategorię"))
 
         {
             String id = bazaDanych.push().getKey();
-            Lokalizacje lokalizacje = new Lokalizacje(id,name,opi,dlu,szer);
+            Lokalizacje lokalizacje = new Lokalizacje(id,name,opi,dlu,szer,cena);
             bazaDanych.child(genere).child(name).setValue(lokalizacje);
 
             Toast.makeText(this,"Dodano",Toast.LENGTH_SHORT).show();

@@ -350,17 +350,17 @@ public class NavigationActivity extends AppCompatActivity
 
 
         if (id == R.id.category_one) {
-            dodajMarker("Bezpłatne");
+            dodajMarker("Historia Lublina");
         }else if (id == R.id.category_two) {
-            dodajMarker("Zabytki");
+            dodajMarker("Natura");
         } else if (id == R.id.category_three) {
             dodajMarker("Dla dzieci");
 
         } else if (id == R.id.category_four) {
-            ddd();
+            dodajMarker("Wydarzenia Kulturalne");
 
         } else if (id == R.id.category_five) {
-
+            dodajMarker("Inne");
         }  else if (id == R.id.log_out) {
             Auth.GoogleSignInApi.signOut(gApi).setResultCallback(new ResultCallback<Status>() {
                 @Override
@@ -474,13 +474,23 @@ public class NavigationActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.getChildren()){
                     Lokalizacje user = s.getValue(Lokalizacje.class);
+                    if(user.isCena()){
                     LatLng location=new LatLng(Double.parseDouble(user.getDlugosc()),Double.parseDouble(user.getSzerokosc()));
                     mMap.addMarker(new MarkerOptions()
                             .position(location)
                             .title(user.getNazwa())
                             .snippet(user.getOpis())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-                    );
+                    );}else{
+
+                        LatLng location=new LatLng(Double.parseDouble(user.getDlugosc()),Double.parseDouble(user.getSzerokosc()));
+                        mMap.addMarker(new MarkerOptions()
+                                .position(location)
+                                .title(user.getNazwa())
+                                .snippet(user.getOpis())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        );
+                    }
                 }
             }
 
@@ -555,8 +565,6 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onMarkerClick(Marker marker) {
         dest = marker.getPosition();
-        Toast.makeText(this, latitude+"Moja lokalizacja"+longitude, Toast.LENGTH_SHORT).show();
-        
         //start.setVisibility(View.VISIBLE);
         return false;
     }

@@ -8,11 +8,11 @@
             <item
                 android:id="@+id/category_one"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Bezpłatne" />
+                android:title="Historia Lublina" />
             <item
                 android:id="@+id/category_two"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Zabytki" />
+                android:title="Natura" />
             <item
                 android:id="@+id/category_three"
                 android:icon="@android:drawable/ic_menu_compass"
@@ -20,11 +20,11 @@
             <item
                 android:id="@+id/category_four"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Slideshow" />
+                android:title="Wydarzenia Kulturalne" />
             <item
                 android:id="@+id/category_five"
                 android:icon="@android:drawable/ic_menu_compass"
-                android:title="Tools" />
+                android:title="Inne" />
         </menu>
     </item>
     <group android:checkableBehavior="single">
