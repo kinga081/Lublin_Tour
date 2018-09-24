@@ -7,17 +7,13 @@
     android:layout_margin="5dp"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.kinga.trasapolublinie.DodajAdminActivity">
+    tools:context="com.example.kinga.trasapolublinie.AdministracjaActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="45dp" />
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
         <EditText
             android:id="@+id/add"
@@ -25,36 +21,42 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="E-mail"
             android:inputType="textPersonName" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/Dodaj"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="match_parent"
-            android:layout_height="126dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"
+            android:onClick="Dodaj"
+            android:text="Dodaj" />
 
-            <Button
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="------------------------------------------------------------------------" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"/>
+
+
+        <Button
                 android:id="@+id/Usun"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="147dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
                 android:onClick="Usun"
                 android:text="Usuń"
                 tools:ignore="OnClick" />
 
-            <Button
-                android:id="@+id/Dodaj"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="148dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:onClick="Dodaj"
-                android:text="Dodaj"
-                tools:ignore="OnClick" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -7,14 +7,14 @@ package com.example.kinga.trasapolublinie;
 public class Admin {
 
     private String email;
-    private String Uid;
+    private String uid;
 
     public Admin(){}
 
 
     public Admin(String email, String uid) {
         this.email = email;
-        this.Uid = uid;
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -22,6 +22,6 @@ public class Admin {
     }
 
     public String getUid() {
-        return Uid;
+        return uid;
     }
 }

@@ -20,8 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,7 +57,7 @@
             android:parentActivityName=".NavigationActivity"
             />
         <activity
-            android:name=".DodajAdminActivity"
+            android:name=".AdministracjaActivity"
             android:label="ADMINISTRATORZY"
             android:parentActivityName=".NavigationActivity"
             />

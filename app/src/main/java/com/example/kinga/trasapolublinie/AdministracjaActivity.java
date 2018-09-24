@@ -1,5 +1,6 @@
 package com.example.kinga.trasapolublinie;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,8 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class DodajAdminActivity extends AppCompatActivity {
+public class AdministracjaActivity extends AppCompatActivity {
 
     private EditText add;
     private DatabaseReference bazaDanych;
@@ -32,11 +33,16 @@ public class DodajAdminActivity extends AppCompatActivity {
     private DatabaseReference bd;
     private ArrayList<String> name;
     private ArrayAdapter<String> adapter;
+    private HashMap<String, String> meMap;
+    private String value;
+    private String key;
+    private ArrayList<String> ble;
+    private String genere;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dodaj_admin);
+        setContentView(R.layout.activity_administracja);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         add = (EditText) findViewById(R.id.add);
@@ -44,6 +50,20 @@ public class DodajAdminActivity extends AppCompatActivity {
 
         konto_admina();
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position!=0){
+                    Wybierz();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                // sometimes you need nothing here
+            }
+        });
         //if(spinner.equals(zspinner.getSelectedItem().toString())) {
         //  Toast.makeText(this, "dupa" + spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
         //}
@@ -52,8 +72,15 @@ public class DodajAdminActivity extends AppCompatActivity {
 
     }
 
+    private void Wybierz() {
+        genere = spinner.getSelectedItem().toString();
+        value = meMap.get(genere);
+    }
+
     public void konto_admina() {
        name=new ArrayList<>();
+        ble=new ArrayList<>();
+       meMap=new HashMap<String, String>();
        name.add("Wybierz co usunąć");
        bazaDanych = FirebaseDatabase.getInstance().getReference("Admin");
        bazaDanych.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -63,6 +90,7 @@ public class DodajAdminActivity extends AppCompatActivity {
                 for (DataSnapshot s : dataSnapshot.getChildren()){
                     Admin user = s.getValue(Admin.class);
                     name.add(user.getEmail());
+                    meMap.put(user.getEmail(),user.getUid());
                 }
 
             }
@@ -72,7 +100,6 @@ public class DodajAdminActivity extends AppCompatActivity {
 
             }
         });
-
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, name);
         spinner.setAdapter(adapter);
 
@@ -88,46 +115,22 @@ public class DodajAdminActivity extends AppCompatActivity {
 
     private void usunPunkt() {
 
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference("Admin").child(value);
+            mDatabaseReference.removeValue();
 
-        String genere = spinner.getSelectedItem().toString();
+            Toast.makeText(this, "Usunięto konto: "+genere, Toast.LENGTH_SHORT).show();
+            add.getText().clear();
 
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("Admin").child(genere);
-        mDatabaseReference.removeValue();
-/*
-        email = add.getText().toString().trim();
-        bazaDanych.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot s : dataSnapshot.getChildren()){
-                    Admin user = s.getValue(Admin.class);
-
-                    if(email.equals(user.getEmail())){
-                       // bazaDanych.removeValue();
-                         cos = user.getEmail();
-                        //mDatabaseReference.removeValue();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });*/
-       // mDatabaseReference = FirebaseDatabase.getInstance().getReference("Admin").child(cos);
-        //mDatabaseReference.removeValue();
+       
 
 
-        Toast.makeText(this, "Usunięto konto: " +genere, Toast.LENGTH_SHORT).show();
-        add.getText().clear();
-        konto_admina();
     }
 
     private void dodajEmail() {
-
 
         email = add.getText().toString().trim();
 
@@ -139,8 +142,11 @@ public class DodajAdminActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Dodano", Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this,"Wprowadź E-mail",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Wprowadź E-mail",Toast.LENGTH_SHORT).show();
         }
         add.getText().clear();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

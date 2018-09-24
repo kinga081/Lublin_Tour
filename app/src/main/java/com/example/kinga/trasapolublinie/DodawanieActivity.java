@@ -40,8 +40,6 @@ public class DodawanieActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-
         nazwa = (EditText)findViewById(R.id.nazwa);
         opis = (EditText)findViewById(R.id.opis);
         dl = (EditText)findViewById(R.id.dlugosc);

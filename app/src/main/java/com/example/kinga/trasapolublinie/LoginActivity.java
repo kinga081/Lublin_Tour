@@ -53,10 +53,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setLogo(R.drawable.logo);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        //toolbar.setTitleTextColor(Color.WHITE);
+        //toolbar.setLogo(R.drawable.logo);
 
         manager = (SensorManager) getSystemService(SENSOR_SERVICE);
         int permissionCheck = ContextCompat.checkSelfPermission(this,//pozwolenie

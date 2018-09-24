@@ -7,7 +7,7 @@
         <menu>
             <item
                 android:id="@+id/category_one"
-                android:icon="@android:drawable/ic_menu_compass"
+                android:icon="@android:drawable/ic_menu_today"
                 android:title="Historia Lublina" />
             <item
                 android:id="@+id/category_two"
